@@ -8,12 +8,12 @@
 */
 GameBoard::GameBoard()
 {
-	preMoves = new Position[9];
-	board = new char*[3];
+	preMoves = new Position[16];
+	board = new char*[4];
 	
-	for(int i=0; i<3; i++)
+	for(int i=0; i<4; i++)
 	{
-		board[i] = new char[3];
+		board[i] = new char[4];
 	}
 };
 
@@ -24,19 +24,19 @@ GameBoard::GameBoard()
 */
 GameBoard::GameBoard(const GameBoard& copy)
 {
-	preMoves = new Position[9];
-	board = new char*[3];
+	preMoves = new Position[16];
+	board = new char*[4];
 	
-	for(int i=0; i<3; i++)
+	for(int i=0; i<4; i++)
 	{
-		board[i] = new char[3];
+		board[i] = new char[4];
 	}
 
-	for(int i=0; i<3; i++)
-		for(int j=0; j<3; j++)
+	for(int i=0; i<4; i++)
+		for(int j=0; j<4; j++)
 			board[i][j] = copy.board[i][j];
 
-	for(int i=0; i<9; i++)
+	for(int i=0; i<16; i++)
 	{
 		preMoves[i].x = copy.preMoves[i].x;
 		preMoves[i].y = copy.preMoves[i].y;
@@ -80,8 +80,8 @@ void GameBoard::InitBoard(int startCom, int movedCnt, int nlevelA, int nlevelB)
 
 	if(movedCnt == 0)		/* 불러온 게임인지 여부를 검사해서 보드판 초기화 */
 	{
-		for(int i=0; i<3; i++)
-			for(int j=0; j<3; j++)
+		for(int i=0; i<4; i++)
+			for(int j=0; j<4; j++)
 				board[i][j] = ' ';
 	}
 };
@@ -103,10 +103,10 @@ void GameBoard::RandomMove()
 
 	while(overlap)
 	{
-		newX = rand()%3;
-		newY = rand()%3;
+		newX = rand()%4;
+		newY = rand()%4;
 
-		if(moveCnt <= 7)	/* 빈 좌표가 2개 이상일때 */
+		if(moveCnt <= 14)	/* 빈 좌표가 2개 이상일때 */
 		{
 			if((newX != preX) && (newY != preY))	/* 랜덤으로생성한 좌표와 이전좌표를 비교하고 */
 				if(board[newX][newY] == ' ')		/* 해당 좌표가 비어있는 공간인지 검사 */
@@ -154,19 +154,19 @@ void GameBoard::UndoMove()
 */
 void GameBoard::CheckState()
 {
-	char temp[3][3];
+	char temp[4][4];
 	int i;
 	
-	for(i=0; i<3; i++)				/* 가로 방향을 검사 */
+	for(i=0; i<4; i++)				/* 가로 방향을 검사 */
 	{	
 		if(board[i][0]!=' ')
 		{
-			if((board[i][0]=='X') && (board[i][1]=='X') && (board[i][2]=='X'))
+			if((board[i][0]=='X') && (board[i][1]=='X') && (board[i][2]=='X') && (board[i][3] == 'X'))
 			{
 				state = STATE_WINA;
 				return;
 			}
-			if((board[i][0]=='O') && (board[i][1]=='O') && (board[i][2]=='O'))
+			if((board[i][0]=='O') && (board[i][1]=='O') && (board[i][2]=='O') && (board[i][3] == 'O'))
 			{
 				state = STATE_WINB;
 				return;
@@ -174,12 +174,12 @@ void GameBoard::CheckState()
 		}
 		if(board[0][i]!=' ')		/* 새로 방향을 검사 */
 		{
-			if((board[0][i]=='X') && (board[1][i]=='X') && (board[2][i]=='X'))
+			if((board[0][i]=='X') && (board[1][i]=='X') && (board[2][i]=='X') && (board[3][i] == 'X'))
 			{
 				state = STATE_WINA;
 				return;
 			}
-			if((board[0][i]=='O') && (board[1][i]=='O') && (board[2][i]=='O'))
+			if((board[0][i]=='O') && (board[1][i]=='O') && (board[2][i]=='O') && (board[3][i] == 'O'))
 			{
 				state = STATE_WINB;
 				return;
@@ -187,7 +187,7 @@ void GameBoard::CheckState()
 		}
 	}
 		
-	if((board[0][0]!=' ')&&(board[0][0]==board[1][1])&&(board[0][0]==board[2][2]))	/* 첫번째 대각선 검사 */
+	if((board[0][0]!=' ')&&(board[0][0]==board[1][1])&&(board[0][0]==board[2][2]) && (board[0][0] == board[3][3]))	/* 첫번째 대각선 검사 */
 	{
 		if(board[0][0]=='X')
 		{
@@ -201,9 +201,9 @@ void GameBoard::CheckState()
 		}
 	}
 	
-	if((board[0][2]!=' ')&&(board[0][2]==board[1][1])&&(board[0][2]==board[2][0])) /* 두번째 대각선 검사 */
+	if((board[0][3]!=' ')&&(board[0][3]==board[1][2])&&(board[0][3]==board[2][1]) && (board[0][3] == board[3][0])) /* 두번째 대각선 검사 */
 	{
-		if(board[0][2]=='X')
+		if(board[0][3]=='X')
 		{
 			state = STATE_WINA;
 			return;
@@ -215,7 +215,7 @@ void GameBoard::CheckState()
 		}
 	}
 
-	if( moveCnt > 8 )
+	if( moveCnt > 15 )
 	{
 		state = STATE_DRAW;		/* 비겼을 때 */
 	}

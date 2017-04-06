@@ -467,13 +467,13 @@ void CTicTacToeDlg::ResetGame()
 	m_board.state = GameBoard::STATE_INIT;
 	m_board.InitBoard(m_startCom, 0, m_levelA, m_levelB);	
 
-	for(int i=0; i<3; i++)
+	for(int i=0; i<4; i++)
 	{
-		for(int j=0; j<3; j++)
+		for(int j=0; j<4; j++)
 		{
 			str.Format(L"%d", count+1);
-			SetDlgItemText(1001+count, str);
-			SetDlgItemText(1011+count, str);
+			SetDlgItemText(IDC_A1+count, str);
+			SetDlgItemText(IDC_B1+count, str);
 			count++;
 		}
 	}
@@ -563,7 +563,7 @@ int CTicTacToeDlg::WaitUndo()
 		}
 	}
 
-	while(GetTickCount() - dwStart < 5000)
+	while(GetTickCount() - dwStart < 1000)
 	{
 		while(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
@@ -606,9 +606,9 @@ void CTicTacToeDlg::UpdateGame()
 			comButton = IDC_A1;
 	}
 
-	for(int i=0; i<3; i++)
+	for(int i=0; i<4; i++)
 	{
-		for(int j=0; j<3; j++)
+		for(int j=0; j<4; j++)
 		{
 			if(m_board.board[i][j] == 'X')
 				SetDlgItemText(comButton+count, L"X");
@@ -626,9 +626,9 @@ void CTicTacToeDlg::UpdateGame()
 	count = 0;
 	if(m_board.state != GameBoard::STATE_PLAY)
 	{
-		for(int i=0; i<3; i++)
+		for(int i=0; i<4; i++)
 		{
-			for(int j=0; j<3; j++)
+			for(int j=0; j<4; j++)
 			{
 				if(m_board.board[i][j] == 'X')
 				{
@@ -680,12 +680,12 @@ void CTicTacToeDlg::LoadGame()
 		{
 			int i, j, stoneCount=0;
 			int Acnt = 0 , Bcnt = 0;
-			char temp[4];
+			char temp[5];
 
-			for(i=0; i<3; i++)
+			for(i=0; i<4; i++)
 			{
-				fscanf_s(fp, "%s", temp, 4);	/* 해당파일에서 한줄을 읽은뒤 */
-				for(j=0; j<3; j++)				/* 문자에 맞게 게임판에 입력 */
+				fscanf_s(fp, "%s", temp, 5);	/* 해당파일에서 한줄을 읽은뒤 */
+				for(j=0; j<4; j++)				/* 문자에 맞게 게임판에 입력 */
 				{				
 					if(temp[j] == 'X')			
 					{

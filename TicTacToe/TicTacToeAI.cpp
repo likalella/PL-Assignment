@@ -33,7 +33,7 @@ void TicTacToeAI::InitNode(Node* node, int inDepth)
 	node->eval = 0;
 	node->childCnt = 0;
 
-	for(int i=0; i<9; i++)
+	for(int i=0; i<16; i++)
 		node->next[i] = NULL;
 };
 
@@ -52,7 +52,7 @@ Node* TicTacToeAI::GetRootNode()
 */
 void TicTacToeAI::GetBestMove()
 {
-	Position iList[9];				/* 현재 게임판에서 놓을 수 있는 좌표 개수, 위치 저장 */
+	Position iList[16];				/* 현재 게임판에서 놓을 수 있는 좌표 개수, 위치 저장 */
 	int	bestValue = -10000;			/* besteval 값 선언 */
 	int	possible = 0;				/* 가능한 개수 저장 변수 */
 		
@@ -84,7 +84,7 @@ void TicTacToeAI::GetBestMove()
 */
 int TicTacToeAI::Minimize(struct treeNode* root)
 {
-	Position iList[9];			/* 현재 게임판에서 놓을 수 있는 좌표 개수, 위치 저장 */
+	Position iList[16];			/* 현재 게임판에서 놓을 수 있는 좌표 개수, 위치 저장 */
 	int	possible = 0;			/* 둘수있는 개수 저장 변수 */
 	int	bestValue = 10000;		/* besteval 값 선언 */
 
@@ -121,7 +121,7 @@ int TicTacToeAI::Minimize(struct treeNode* root)
 */
 int TicTacToeAI::Maximize(struct treeNode* root)
 {
-	Position iList[9];			/* 현재 게임판에서 놓을 수 있는 좌표 개수, 위치 저장 */
+	Position iList[16];			/* 현재 게임판에서 놓을 수 있는 좌표 개수, 위치 저장 */
 	int	bestValue = -10000;		/* besteval 값 선언 */
 	int	possible;				/* 둘수있는 개수 저장 변수 */
 		
@@ -160,12 +160,12 @@ int TicTacToeAI::CheckSymmetric(GameBoard preBoard, GameBoard newBoard)
 {
 	int i, j, k, check = 0;
 
-	char newboard[3][3];	/* 검사 대상 게임판을 저장할 변수 */
-	char copy[3][3];		
-	char temp[3][3];
+	char newboard[4][4];	/* 검사 대상 게임판을 저장할 변수 */
+	char copy[4][4];		
+	char temp[4][4];
 
-	for(i=0; i<3; i++)
-		for(j=0; j<3; j++)
+	for(i=0; i<4; i++)
+		for(j=0; j<4; j++)
 		{
 			copy[i][j] = preBoard.board[i][j];		/* 이전 게임판을 복사 */
 			newboard[i][j] = newBoard.board[i][j];	/* 검사 대상 게임판을 복사 */
@@ -174,27 +174,29 @@ int TicTacToeAI::CheckSymmetric(GameBoard preBoard, GameBoard newBoard)
 	 /* copy 게임판을 왼쪽으로 회전, 총 3번 회전 */
 	for(i=0; i<3; i++)
 	{
-		for(j=0; j<3; j++)            
-			for(k=0; k<3; k++)
+		for(j=0; j<4; j++)            
+			for(k=0; k<4; k++)
 				temp[j][k]=copy[j][k];
 
-		for(j=0; j<3; j++)       
-			for(k=0; k<3; k++)
-				copy[2-k][j]=temp[j][k];
+		for(j=0; j<4; j++)       
+			for(k=0; k<4; k++)
+				copy[3-k][j]=temp[j][k];
 			
 		if(CheckSameBoard(copy, newboard))	/* 한번 회전할때마다 같은지 검사 */
 			return 1;						/* 같으면 1 반환 */
 	}
 
-	for(i=0; i<3; i++)
-		for(j=0; j<3; j++)
+	for(i=0; i<4; i++)
+		for(j=0; j<4; j++)
 			temp[i][j]=copy[i][j];
 	
 	 /* copy 게임판을 좌우로 대칭 */
-	for(i=0;i<3;i++)
+	for(i=0;i<4;i++)
 	{
-		copy[i][0]=temp[i][2];
-		copy[i][2]=temp[i][0];
+		copy[i][0]=temp[i][3];
+		copy[i][1]=temp[i][2];
+		copy[i][2] = temp[i][1];
+		copy[i][3] = temp[i][0];
 	}
 
 	if(CheckSameBoard(copy, newboard))	/* 대칭한 게임판 검사 */
@@ -204,13 +206,13 @@ int TicTacToeAI::CheckSymmetric(GameBoard preBoard, GameBoard newBoard)
 	/* copy 게임판을 왼쪽으로 회전, 총 3번 회전 */
 	for(i=0; i<3; i++)
 	{
-		for(j=0; j<3; j++)               
-			for(k=0; k<3; k++)
+		for(j=0; j<4; j++)               
+			for(k=0; k<4; k++)
 				temp[j][k]=copy[j][k];
 
-		for(j=0; j<3; j++)
-			for(k=0; k<3; k++)
-				copy[2-k][j]=temp[j][k];
+		for(j=0; j<4; j++)
+			for(k=0; k<4; k++)
+				copy[3-k][j]=temp[j][k];
 			
 		if(CheckSameBoard(copy, newboard))	/* 한번 회전할때마다 같은지 검사 */
 			return 1;						/* 같으면 1 반환 */
@@ -222,17 +224,17 @@ int TicTacToeAI::CheckSymmetric(GameBoard preBoard, GameBoard newBoard)
 	함 수 : CheckSameBoard(char (*board1)[3], char (*board2)[3])
 	기 능 :	기존 게임판과 검사할 게임판을 받아와서 일치하는지 여부 검사
 */
-int TicTacToeAI::CheckSameBoard(char (*board1)[3], char (*board2)[3])
+int TicTacToeAI::CheckSameBoard(char (*board1)[4], char (*board2)[4])
 {
 	int i, j;
 	int count = 0;
 
-	for(i=0; i<3; i++)
-		for(j=0; j<3; j++)
+	for(i=0; i<4; i++)
+		for(j=0; j<4; j++)
 			if(board1[i][j] == board2[i][j])
 				count++;
 
-	if(count == 9)	
+	if(count == 16)	
 		return 1;    /* 같으면 1 반환 */
 	else			
 		return 0;    /* 다르면 0 반환 */
@@ -250,9 +252,9 @@ int TicTacToeAI::GetPossibleMove(Position* iList)
 
 	GameBoard tempBoard = tttBoard;	/* 게임판 복사 */
 		
-	for(int i=0; i<3; i++ )
+	for(int i=0; i<4; i++ )
 	{
-		for(int j=0; j<3; j++)
+		for(int j=0; j<4; j++)
 		{
 			if( tttBoard.board[i][j] == ' ' )
 			{
@@ -302,7 +304,7 @@ int TicTacToeAI::CheckEnd()
 */
 int TicTacToeAI::EvaluateBoard(struct treeNode* root)
 {
-	char calBoard[3][3];
+	char calBoard[4][4];
 	int eval = 0, k = 0;		
 	int comA = 0, comB = 0;
 
@@ -331,48 +333,56 @@ int TicTacToeAI::EvaluateBoard(struct treeNode* root)
 		}		
 	}
 	
-	for(int i=0; i<3; i++)
-		for(int j=0; j<3; j++)
+	for(int i=0; i<4; i++)
+		for(int j=0; j<4; j++)
 			calBoard[i][j] = tttBoard.board[i][j];
 
 	/* 가로 3줄, 세로 3줄을 각각 X, O로 이길수있는 수를 계산 */
-	for(int i=0;i<3;i++)
+	for(int i=0;i<4;i++)
 	{
 		if( (calBoard[i][0]=='X' || calBoard[i][0]==' ') && 
 			(calBoard[i][1]=='X' || calBoard[i][1]==' ') && 
-			(calBoard[i][2]=='X' || calBoard[i][2]==' '))
+			(calBoard[i][2]=='X' || calBoard[i][2]==' ') &&
+			(calBoard[i][3] == 'X' || calBoard[i][3] == ' '))
 			comA++;
 		if( (calBoard[i][0]=='O' || calBoard[i][0]==' ') && 
 			(calBoard[i][1]=='O' || calBoard[i][1]==' ') && 
-			(calBoard[i][2]=='O' || calBoard[i][2]==' '))
+			(calBoard[i][2]=='O' || calBoard[i][2]==' ') &&
+			(calBoard[i][3] == 'O' || calBoard[i][3] == ' '))
 			comB++;
 		if( (calBoard[0][i]=='X' || calBoard[0][i]==' ') && 
 			(calBoard[1][i]=='X' || calBoard[1][i]==' ') && 
-			(calBoard[2][i]=='X' || calBoard[2][i]==' '))
+			(calBoard[2][i]=='X' || calBoard[2][i]==' ') &&
+			(calBoard[3][i] == 'X' || calBoard[3][i] == ' '))
 			comA++;
 		if( (calBoard[0][i]=='O' || calBoard[0][i]==' ') && 
 			(calBoard[1][i]=='O' || calBoard[1][i]==' ') && 
-			(calBoard[2][i]=='O' || calBoard[2][i]==' '))
+			(calBoard[2][i]=='O' || calBoard[2][i]==' ') &&
+			(calBoard[3][i] == 'O' || calBoard[3][i] == ' '))
 			comB++;
 	}
 	
 	/* 왼쪽, 오른쪽 대각선에서 이길수있는 수를 계산 */
 	if( (calBoard[0][0]=='X' || calBoard[0][0]==' ') && 
 		(calBoard[1][1]=='X' || calBoard[1][1]==' ') && 
-		(calBoard[2][2]=='X' || calBoard[2][2]==' ') )
+		(calBoard[2][2]=='X' || calBoard[2][2]==' ') &&
+		(calBoard[3][3] == 'X' || calBoard[3][3] == ' '))
 		comA++;
 	if( (calBoard[0][0]=='O' || calBoard[0][0]==' ') && 
 		(calBoard[1][1]=='O' || calBoard[1][1]==' ') && 
-		(calBoard[2][2]=='O' || calBoard[2][2]==' ') )
+		(calBoard[2][2]=='O' || calBoard[2][2]==' ') &&
+		(calBoard[3][3] == 'O' || calBoard[3][3] == ' '))
 		comB++;
 
-	if( (calBoard[0][2]=='X' || calBoard[0][2]==' ') && 
-		(calBoard[1][1]=='X' || calBoard[1][1]==' ') && 
-		(calBoard[2][0]=='X' || calBoard[2][0]==' ') )
+	if( (calBoard[0][3]=='X' || calBoard[0][3]==' ') && 
+		(calBoard[1][2]=='X' || calBoard[1][2]==' ') && 
+		(calBoard[2][1]=='X' || calBoard[2][1]==' ') &&
+		(calBoard[3][0] == 'X' || calBoard[3][0] == ' '))
 		comA++;
-	if( (calBoard[0][2]=='O' || calBoard[0][2]==' ') && 
-		(calBoard[1][1]=='O' || calBoard[1][1]==' ') && 
-		(calBoard[2][0]=='O' || calBoard[2][0]==' ') )
+	if( (calBoard[0][3]=='O' || calBoard[0][3]==' ') && 
+		(calBoard[1][2]=='O' || calBoard[1][2]==' ') && 
+		(calBoard[2][1]=='O' || calBoard[2][1]==' ') &&
+		(calBoard[3][0] == 'O' || calBoard[3][0] == ' '))
 		comB++;
 
 	/* 현재 AI기준이 컴퓨터 A인지 B인지에 따라 이길수있는 수를 계산해서 반환 */

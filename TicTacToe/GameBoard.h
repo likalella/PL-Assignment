@@ -9,7 +9,7 @@ typedef struct treeNode		/* 출력을 위한 노드 구조체 */
 	int depth;				/* 현재 노드의 깊이 */
 	int eval;				/* 현재 게임판 평가값 */
 	int childCnt;			/* 노드가 가지고 있는 자식노드 개수 */
-	struct treeNode* next[9];	/* 자식 노드들 */
+	struct treeNode* next[16];	/* 자식 노드들 */
 }Node;
 
 class GameBoard
