@@ -78,8 +78,6 @@ void TicTacToeAI::GetBestMove()
 		}
 
 		if (bestValue > beta) {
-			//deleteNode(root->next[n]);
-			//delete(root->next[n]);
 			break;
 		}
 		n++;
@@ -124,8 +122,6 @@ int TicTacToeAI::Minimize(struct treeNode* root, int alpha, int beta)
 			b = bestValue;
 		}
 		if (alpha > bestValue) {
-			//deleteNode(root->next[n]);
-			//delete(root->next[n]);
 			break;
 		}
 		n++;
@@ -171,8 +167,6 @@ int TicTacToeAI::Maximize(struct treeNode* root, int alpha, int beta)
 			a = bestValue;
 		}
 		if (bestValue > beta) {
-			//deleteNode(root->next[n]);
-			//delete(root->next[n]);
 			break;
 		}
 

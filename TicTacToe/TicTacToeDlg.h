@@ -44,6 +44,7 @@ public:
 	afx_msg void OnBtnClick(UINT btnID);
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
+	afx_msg void OnBnClickedButtonSave();
 	HACCEL m_hAccelTable;
 	CButton m_undoA;
 	CButton m_undoB;

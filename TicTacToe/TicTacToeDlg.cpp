@@ -73,6 +73,7 @@ BEGIN_MESSAGE_MAP(CTicTacToeDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_UNDO_B, &CTicTacToeDlg::OnBnClickedButtonUndoB)
 	ON_WM_CTLCOLOR()
 	ON_COMMAND_RANGE(IDC_B1, IDC_B16, &CTicTacToeDlg::OnBtnClick)
+	ON_BN_CLICKED(IDC_BUTTON_SAVE, &CTicTacToeDlg::OnBnClickedButtonSave)
 END_MESSAGE_MAP()
 
 
@@ -257,6 +258,11 @@ void CTicTacToeDlg::OnBnClickedButtonInit()
 	ResetGame();
 }
 
+void CTicTacToeDlg::OnBnClickedButtonSave()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	SaveGame();
+}
 
 void CTicTacToeDlg::OnBnClickedButtonLoad()
 {
@@ -574,7 +580,6 @@ void CTicTacToeDlg::SaveGame() {
 	}
 
 }
-
 
 /**
 함 수 : LoadGame()
